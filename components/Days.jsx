@@ -22,7 +22,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 16,
-    marginTop: 20
+    marginTop: 20,
+    marginBottom: 20,
+    borderColor: 'gray',
+    borderBottomWidth: 1
   },
   day: {
     fontSize: 16,
@@ -34,6 +37,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     backgroundColor: 'rgb(242,242,242)',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom: 20
   }
 })

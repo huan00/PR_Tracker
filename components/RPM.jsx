@@ -26,12 +26,11 @@ export default RPM
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // width: '100%',
+    width: '100%',
     flexDirection: 'row',
-    marginHorizontal: 16,
     paddingHorizontal: 16,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginBottom: 20
   },
   record: {
     width: '30%',
