@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View } from 'react-native'
 import Days from './components/Days'
+import RPM from './components/RPM'
 import WeeklyStats from './components/WeeklyStats'
 
 export default function App() {
@@ -11,6 +12,7 @@ export default function App() {
       </View>
       <WeeklyStats />
       <Days />
+      <RPM />
       <StatusBar style="auto" />
     </View>
   )
