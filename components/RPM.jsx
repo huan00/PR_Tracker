@@ -12,8 +12,10 @@ const RPM = () => {
       <View style={styles.rpmContainer}>
         <ScrollView horizontal={true} style={styles.rpmScroll}>
           <View style={{ flexDirection: 'row' }}>
-            {RPM.map((rpm) => (
-              <Text style={styles.rpmText}>{rpm}</Text>
+            {RPM.map((rpm, idx) => (
+              <Text style={styles.rpmText} key={idx}>
+                {rpm}
+              </Text>
             ))}
           </View>
         </ScrollView>

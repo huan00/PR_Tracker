@@ -5,8 +5,8 @@ const Days = () => {
   const days = ['S', 'M', 'T', 'W', 'Th', 'F', 'S']
   return (
     <View style={styles.container}>
-      {days.map((day) => (
-        <View style={styles.dayContainer}>
+      {days.map((day, idx) => (
+        <View style={styles.dayContainer} key={idx}>
           <Text style={styles.day}>{day}</Text>
         </View>
       ))}
