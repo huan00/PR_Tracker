@@ -8,18 +8,18 @@ const WeeklyStats = () => {
 
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.title}>
         <Text style={styles.weeklyStats}>{WeeklyStats}</Text>
       </View>
       <View style={styles.workoutContainer}>
         <View style={styles.workoutContainerStats}>
           <View style={styles.workoutStats}>
             <Text style={styles.workoutSessions}>{workouts}</Text>
-            <Text>Workouts</Text>
+            <Text style={styles.workoutSessionsText}>Workouts</Text>
           </View>
-          <View>
+          <View style={styles.workoutStats}>
             <Text style={styles.workoutSessions}>{activeDays}</Text>
-            <Text>Active Days</Text>
+            <Text style={styles.workoutSessionsText}>Active Days</Text>
           </View>
         </View>
         <View>
@@ -37,12 +37,17 @@ export default WeeklyStats
 
 const styles = StyleSheet.create({
   avatarImg: {
-    width: 50,
-    height: 50,
-    borderRadius: 50
+    width: 65,
+    height: 65,
+    borderRadius: 50,
+    marginRight: 30
   },
   container: {
-    width: '100%'
+    width: '100%',
+    paddingHorizontal: 16
+  },
+  title: {
+    paddingBottom: 24
   },
   weeklyStats: {
     fontSize: 24
@@ -52,16 +57,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   workoutContainerStats: {
+    width: '50%',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center'
   },
   workoutSessions: {
-    fontSize: 36
+    width: '40%',
+    fontSize: 36,
+    textAlign: 'left'
+  },
+  workoutSessionsText: {
+    color: 'gray'
   },
   workoutStats: {
-    width: '40%'
-    // alignContent: 'center',
-    // alignItems: 'space-between'
+    alignContent: 'center',
+    alignItems: 'flex-start'
   }
 })
