@@ -39,8 +39,7 @@ const styles = StyleSheet.create({
   avatarImg: {
     width: 65,
     height: 65,
-    borderRadius: 50,
-    marginRight: 30
+    borderRadius: 50
   },
   container: {
     width: '100%',
