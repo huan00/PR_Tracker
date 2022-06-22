@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, StyleSheet, SafeAreaView } from 'react-native'
 import WeeklyStats from '../components/WeeklyStats'
 import Days from '../components/Days'
@@ -6,32 +6,42 @@ import RPM from '../components/RPM'
 import ExerciseRPM from '../components/ExerciseRPM'
 import WorkoutButton from '../components/WorkoutButton'
 import Ads from '../components/Ads'
+import RecordWorkout from '../components/RecordWorkout'
 
-const HomeScreen = ({ navigation }) => {
-  const nagivateToExercise = () => {
-    navigation.nagivate('ExerciseDetail', { name: 'ExerciseDetail' })
+const HomeScreen = ({}) => {
+  const [modalVisible, setModalVisible] = useState(false)
+  const handleRecordWorkout = () => {
+    console.log('hello')
+    setModalVisible((modalVisible) => !modalVisible)
   }
   return (
-    <View style={styles.viewContainer}>
-      <View style={styles.contentContainer}>
-        <View style={styles.detailContainer}>
-          <WeeklyStats />
-          <Days />
-          <RPM />
-          <ExerciseRPM moveTo={nagivateToExercise} />
+    <SafeAreaView>
+      <View style={styles.viewContainer}>
+        <View style={styles.contentContainer}>
+          <View style={styles.detailContainer}>
+            <WeeklyStats />
+            <Days />
+            <RPM />
+            <ExerciseRPM />
+            <RecordWorkout
+              modalVisible={modalVisible}
+              setModalVisible={setModalVisible}
+              handlePress={handleRecordWorkout}
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            <WorkoutButton
+              title="Record Workout"
+              handlePress={handleRecordWorkout}
+            />
+            <WorkoutButton title={'+ Plan'} />
+          </View>
         </View>
-        <View style={styles.buttonContainer}>
-          <WorkoutButton
-            text={'Record Workout'}
-            nagivateToExercise={nagivateToExercise}
-          />
-          <WorkoutButton text={'+ Plan'} />
+        <View style={styles.adsContainer}>
+          <Ads />
         </View>
       </View>
-      <View style={styles.adsContainer}>
-        <Ads />
-      </View>
-    </View>
+    </SafeAreaView>
   )
 }
 

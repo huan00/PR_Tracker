@@ -10,7 +10,7 @@ const RPM = () => {
         <Text style={styles.rpmText}>{record}</Text>
       </View>
       <View style={styles.rpmContainer}>
-        <ScrollView horizontal={true} style={styles.rpmScroll}>
+        <ScrollView horizontal={true}>
           <View style={{ flexDirection: 'row' }}>
             {RPM.map((rpm, idx) => (
               <Text style={styles.rpmText} key={idx}>
@@ -48,6 +48,5 @@ const styles = StyleSheet.create({
     fontSize: 24,
     paddingRight: 16,
     color: 'black'
-  },
-  rpmScroll: {}
+  }
 })

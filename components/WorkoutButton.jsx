@@ -1,16 +1,11 @@
 import React from 'react'
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 
-const WorkoutButton = ({ text, navigation }) => {
+const WorkoutButton = ({ title, handlePress }) => {
   return (
     <View>
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('ExerciseDetail', { name: 'exercise' })
-        }
-        style={styles.buttonContainer}
-      >
-        <Text style={styles.buttonText}>{text}</Text>
+      <TouchableOpacity onPress={handlePress} style={styles.buttonContainer}>
+        <Text style={styles.buttonText}>{title}</Text>
       </TouchableOpacity>
     </View>
   )
