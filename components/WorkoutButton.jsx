@@ -1,10 +1,15 @@
 import React from 'react'
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 
-const WorkoutButton = ({ text }) => {
+const WorkoutButton = ({ text, navigation }) => {
   return (
     <View>
-      <TouchableOpacity onPress="" style={styles.buttonContainer}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('ExerciseDetail', { name: 'exercise' })
+        }
+        style={styles.buttonContainer}
+      >
         <Text style={styles.buttonText}>{text}</Text>
       </TouchableOpacity>
     </View>

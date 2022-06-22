@@ -2,12 +2,18 @@ import { useState } from 'react'
 import { Text, View, Image, StyleSheet } from 'react-native'
 
 const WeeklyStats = () => {
-  const WeeklyStats = 'Weekly Stats'
+  const WeeklyStats = 'Plan Progress'
   const [workouts, setWorkouts] = useState(4)
   const [activeDays, setActiveDays] = useState(6)
 
   return (
     <View style={styles.container}>
+      <View>
+        <Image
+          style={styles.avatarImg}
+          source={{ uri: 'https://www.w3schools.com/w3images/avatar2.png' }}
+        />
+      </View>
       <View style={styles.title}>
         <Text style={styles.weeklyStats}>{WeeklyStats}</Text>
       </View>
@@ -22,12 +28,6 @@ const WeeklyStats = () => {
             <Text style={styles.workoutSessionsText}>Active Days</Text>
           </View>
         </View>
-        <View>
-          <Image
-            style={styles.avatarImg}
-            source={{ uri: 'https://www.w3schools.com/w3images/avatar2.png' }}
-          />
-        </View>
       </View>
     </View>
   )
@@ -39,12 +39,12 @@ const styles = StyleSheet.create({
   avatarImg: {
     width: 65,
     height: 65,
-    borderRadius: 50
+    borderRadius: 50,
+    marginBottom: 20
   },
   container: {
     width: '100%',
-    paddingHorizontal: 16,
-    marginTop: 40
+    paddingHorizontal: 16
   },
   title: {
     paddingBottom: 24
