@@ -7,6 +7,7 @@ import ExerciseRPM from '../components/ExerciseRPM'
 import WorkoutButton from '../components/WorkoutButton'
 import Ads from '../components/Ads'
 import RecordWorkout from '../components/RecordWorkout'
+import RecordWorkoutDetail from '../components/RecordWorkoutDetail'
 
 const HomeScreen = ({}) => {
   const [modalVisible, setModalVisible] = useState(false)
@@ -28,6 +29,7 @@ const HomeScreen = ({}) => {
               setModalVisible={setModalVisible}
               handlePress={handleRecordWorkout}
             />
+            <RecordWorkoutDetail />
           </View>
           <View style={styles.buttonContainer}>
             <WorkoutButton

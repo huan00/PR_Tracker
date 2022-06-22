@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
   imageContainer: {
     flexGrow: 1,
     width: '100%',
-    // height: 300,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'blue',
