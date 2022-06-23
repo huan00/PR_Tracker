@@ -22,6 +22,7 @@ const HomeScreen = ({ navigation }) => {
   const handleAddWorkout = (newWorkout) => {
     setMyWorkouts((myWorkouts) => [...myWorkouts, newWorkout])
   }
+  console.log(myWorkouts)
   return (
     <SafeAreaView>
       <View style={styles.viewContainer}>
@@ -35,7 +36,7 @@ const HomeScreen = ({ navigation }) => {
                 {myWorkouts.map((workout, idx) => (
                   <ExerciseRPM
                     navigation={navigation}
-                    name="Front Squat"
+                    name={workout.name}
                     weight={workout.weight}
                     key={idx}
                   />

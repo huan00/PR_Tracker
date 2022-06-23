@@ -42,7 +42,9 @@ const reducerRep = (state, action) => {
 const RecordWorkoutDetail = ({
   workoutDetailModal,
   setNewWorkout,
-  newWorkout
+  newWorkout,
+  handleAddWorkout,
+  setWorkoutDetailModal
 }) => {
   const [weight, dispatchWeight] = useReducer(reducerWeight, initialWeight)
   const [rep, dispatchRep] = useReducer(reducerRep, initialRep)
@@ -78,14 +80,25 @@ const RecordWorkoutDetail = ({
 
   const handleRep = (type) => {
     dispatchRep({ type: type })
-    setNewWorkout((newWorkout) => ({ ...newWorkout, rep: rep.rep }))
+    setNewWorkout((newWorkout) => ({ ...newWorkout, rpm: rep.rep }))
     console.log(newWorkout)
   }
 
   const handleRepInput = (type, value) => {
     dispatchRep({ type: type, payload: parseInt(value) })
-    setNewWorkout((newWorkout) => ({ ...newWorkout, rep: rep.rep }))
+    setNewWorkout((newWorkout) => ({ ...newWorkout, rpm: rep.rep }))
     console.log(newWorkout)
+  }
+
+  const handleDate = (date) => {
+    setNewWorkout((newWorkout) => ({ ...newWorkout, date: date }))
+    console.log(newWorkout)
+  }
+
+  const handleSave = () => {
+    handleAddWorkout(newWorkout)
+    setWorkoutDetailModal(false)
+    console.log(workoutDetailModal)
   }
 
   return (
@@ -147,7 +160,7 @@ const RecordWorkoutDetail = ({
                   </Text>
                   <Text
                     style={styles.adjustText}
-                    onPress={() => handleRep('increment')}
+                    onPress={() => handleRep('decrement')}
                   >
                     -
                   </Text>
@@ -181,14 +194,21 @@ const RecordWorkoutDetail = ({
             >
               <View style={styles.calendar}>
                 {calendar(30).map((day, idx) => (
-                  <Text style={styles.calendarText} key={idx}>
+                  <Text
+                    style={styles.calendarText}
+                    key={idx}
+                    onPress={() => handleDate(day)}
+                  >
                     {day}
                   </Text>
                 ))}
               </View>
             </ScrollView>
             <View>
-              <WorkoutButton title={'Save'} />
+              <WorkoutButton
+                title={'Save'}
+                handlePress={() => handleSave(newWorkout)}
+              />
             </View>
           </View>
         </View>

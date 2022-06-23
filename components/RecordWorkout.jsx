@@ -11,7 +11,12 @@ import {
 import WorkoutButton from './WorkoutButton'
 import RecordWorkoutDetail from './RecordWorkoutDetail'
 
-const RecordWorkout = ({ modalVisible, handlePress, setModalVisible }) => {
+const RecordWorkout = ({
+  modalVisible,
+  handlePress,
+  setModalVisible,
+  handleAddWorkout
+}) => {
   const workouts = [
     'Front Squat',
     'Back Squat',
@@ -70,8 +75,10 @@ const RecordWorkout = ({ modalVisible, handlePress, setModalVisible }) => {
       </Modal>
       <RecordWorkoutDetail
         workoutDetailModal={workoutDetailModal}
+        setWorkoutDetailModal={setWorkoutDetailModal}
         setNewWorkout={setNewWorkout}
         newWorkout={newWorkout}
+        handleAddWorkout={handleAddWorkout}
       />
     </View>
   )
