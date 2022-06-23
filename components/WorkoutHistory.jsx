@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, View } from 'react-native'
+import { Image, View, Text } from 'react-native'
 
 const WorkoutHistory = () => {
   const rpms = ['1 rpm', '4 rpm', '6 rpm', '8 rpm']
@@ -10,8 +10,8 @@ const WorkoutHistory = () => {
           <Text>Front Squat</Text>
         </View>
         <View>
-          {rpms.map((rpm) => (
-            <Text>{rpm}</Text>
+          {rpms.map((rpm, idx) => (
+            <Text key={idx}>{rpm}</Text>
           ))}
         </View>
       </View>

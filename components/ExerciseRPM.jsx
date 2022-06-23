@@ -1,22 +1,28 @@
-import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Touchable,
+  TouchableOpacity
+} from 'react-native'
 
-const ExerciseRPM = ({ moveTo }) => {
-  const excerise = 'Front Squat'
-  const weight = '45KG'
+const ExerciseRPM = ({ navigation, name, weight }) => {
+  // const excerise = 'Front Squat'
+  // const weight = '45KG'
 
   const navigate = () => {}
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.textContainer} onPress={moveTo}>
-          <Text>{excerise}</Text>
-          <Text>{weight}</Text>
-        </View>
-      </ScrollView>
-    </View>
+    // <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.textContainer}
+      onPress={() => navigation.navigate('WorkoutHistory')}
+    >
+      <Text>{name}</Text>
+      <Text>{weight}</Text>
+    </TouchableOpacity>
+    // </View>
   )
 }
 
@@ -36,6 +42,6 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     borderRadius: 5,
     padding: 16,
-    marginBottom: 15
+    marginBottom: 10
   }
 })

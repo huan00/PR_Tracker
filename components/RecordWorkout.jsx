@@ -9,6 +9,7 @@ import {
   TouchableOpacity
 } from 'react-native'
 import WorkoutButton from './WorkoutButton'
+import RecordWorkoutDetail from './RecordWorkoutDetail'
 
 const RecordWorkout = ({ modalVisible, handlePress, setModalVisible }) => {
   const workouts = [
@@ -19,6 +20,26 @@ const RecordWorkout = ({ modalVisible, handlePress, setModalVisible }) => {
     'Back Squat',
     'OverHead Squat'
   ]
+
+  const [newWorkout, setNewWorkout] = useState({
+    name: '',
+    date: '',
+    rpm: '',
+    weight: ''
+  })
+
+  const handleNewWorkout = (workout) => {
+    setNewWorkout((newWorkout) => ({
+      ...newWorkout,
+      name: workout
+    }))
+  }
+  const [workoutDetailModal, setWorkoutDetailModal] = useState(false)
+
+  const handleNext = () => {
+    handlePress()
+    setWorkoutDetailModal((workoutDetailModal) => !workoutDetailModal)
+  }
   return (
     <View style={styles.container}>
       <Modal animationType="slide" visible={modalVisible} transparent={true}>
@@ -27,8 +48,14 @@ const RecordWorkout = ({ modalVisible, handlePress, setModalVisible }) => {
             <Text>Record your Workout</Text>
             <ScrollView horizontal={true}>
               <View style={styles.workouts}>
-                {workouts.map((workout) => (
-                  <Text style={styles.workoutText}>{workout}</Text>
+                {workouts.map((workout, idx) => (
+                  <Text
+                    key={idx}
+                    style={styles.workoutText}
+                    onPress={() => handleNewWorkout(workout)}
+                  >
+                    {workout}
+                  </Text>
                 ))}
               </View>
             </ScrollView>
@@ -36,11 +63,16 @@ const RecordWorkout = ({ modalVisible, handlePress, setModalVisible }) => {
               <Image source={''} style={styles.image} />
             </View>
             <View>
-              <WorkoutButton title={'Next'} handlePress={handlePress} />
+              <WorkoutButton title={'Next'} handlePress={handleNext} />
             </View>
           </View>
         </View>
       </Modal>
+      <RecordWorkoutDetail
+        workoutDetailModal={workoutDetailModal}
+        setNewWorkout={setNewWorkout}
+        newWorkout={newWorkout}
+      />
     </View>
   )
 }

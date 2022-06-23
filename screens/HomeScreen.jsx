@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, SafeAreaView } from 'react-native'
+import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import WeeklyStats from '../components/WeeklyStats'
 import Days from '../components/Days'
 import RPM from '../components/RPM'
@@ -9,11 +10,17 @@ import Ads from '../components/Ads'
 import RecordWorkout from '../components/RecordWorkout'
 import RecordWorkoutDetail from '../components/RecordWorkoutDetail'
 
-const HomeScreen = ({}) => {
+const HomeScreen = ({ navigation }) => {
+  const [myWorkouts, setMyWorkouts] = useState([
+    { name: 'Front Squat', date: '6/11/22', rpm: '1', weight: '120lb' }
+  ])
+
   const [modalVisible, setModalVisible] = useState(false)
   const handleRecordWorkout = () => {
-    console.log('hello')
     setModalVisible((modalVisible) => !modalVisible)
+  }
+  const handleAddWorkout = (newWorkout) => {
+    setMyWorkouts((myWorkouts) => [...myWorkouts, newWorkout])
   }
   return (
     <SafeAreaView>
@@ -23,13 +30,24 @@ const HomeScreen = ({}) => {
             <WeeklyStats />
             <Days />
             <RPM />
-            <ExerciseRPM />
+            <View style={{ height: 200 }}>
+              <ScrollView>
+                {myWorkouts.map((workout, idx) => (
+                  <ExerciseRPM
+                    navigation={navigation}
+                    name="Front Squat"
+                    weight={workout.weight}
+                    key={idx}
+                  />
+                ))}
+              </ScrollView>
+            </View>
             <RecordWorkout
               modalVisible={modalVisible}
               setModalVisible={setModalVisible}
               handlePress={handleRecordWorkout}
+              handleAddWorkout={handleAddWorkout}
             />
-            <RecordWorkoutDetail />
           </View>
           <View style={styles.buttonContainer}>
             <WorkoutButton

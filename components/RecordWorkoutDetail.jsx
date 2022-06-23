@@ -1,19 +1,100 @@
-import React from 'react'
-import { View, Modal, Text, ScrollView, Image, StyleSheet } from 'react-native'
+import React, { useReducer, useState } from 'react'
+import {
+  View,
+  Modal,
+  Text,
+  ScrollView,
+  TextInput,
+  StyleSheet
+} from 'react-native'
 import WorkoutButton from './WorkoutButton'
 
-const RecordWorkoutDetail = () => {
-  const calendar = (days) => {
-    let date = []
-    for (let i = 1; i < days; i++) {
-      date.push(i)
+const initialWeight = { weight: 100 }
+const initialRep = { rep: 1 }
+
+const reducerWeight = (state, action) => {
+  switch (action.type) {
+    case 'increment':
+      return { weight: parseInt(state.weight) + 1 }
+    case 'decrement':
+      return { weight: parseInt(state.weight) - 1 }
+    case 'input':
+      return { weight: parseInt(action.payload) }
+    default: {
+      return { weight: state.weight }
     }
+  }
+}
+const reducerRep = (state, action) => {
+  switch (action.type) {
+    case 'increment':
+      return { rep: parseInt(state.rep) + 1 }
+    case 'decrement':
+      return { rep: parseInt(state.rep) - 1 }
+    case 'input':
+      return { rep: parseInt(action.payload) }
+    default: {
+      return { rep: state.rep }
+    }
+  }
+}
+
+const RecordWorkoutDetail = ({
+  workoutDetailModal,
+  setNewWorkout,
+  newWorkout
+}) => {
+  const [weight, dispatchWeight] = useReducer(reducerWeight, initialWeight)
+  const [rep, dispatchRep] = useReducer(reducerRep, initialRep)
+
+  const calendar = (days) => {
+    const week = { Su: 0, M: 1, T: 2, W: 3, Th: 4, F: 5, Sa: 6 }
+    let dayOfWeek = new Date().getDay()
+    let dateOfMonth = new Date().getDate()
+    let start = dateOfMonth - dayOfWeek
+    let date = []
+
+    for (let key in week) {
+      date.push(key + start++)
+    }
+
     return date
+  }
+
+  const handleWeight = (type) => {
+    dispatchWeight({ type: type })
+    setNewWorkout((newWorkout) => ({ ...newWorkout, weight: weight.weight }))
+    console.log(newWorkout)
+  }
+
+  const handleWeightInput = (type, value) => {
+    dispatchWeight({
+      type: type,
+      payload: parseInt(value)
+    })
+    setNewWorkout((newWorkout) => ({ ...newWorkout, weight: weight.weight }))
+    console.log(newWorkout)
+  }
+
+  const handleRep = (type) => {
+    dispatchRep({ type: type })
+    setNewWorkout((newWorkout) => ({ ...newWorkout, rep: rep.rep }))
+    console.log(newWorkout)
+  }
+
+  const handleRepInput = (type, value) => {
+    dispatchRep({ type: type, payload: parseInt(value) })
+    setNewWorkout((newWorkout) => ({ ...newWorkout, rep: rep.rep }))
+    console.log(newWorkout)
   }
 
   return (
     <View style={styles.container}>
-      <Modal animationType="slide" visible={false} transparent={true}>
+      <Modal
+        animationType="slide"
+        visible={workoutDetailModal}
+        transparent={true}
+      >
         <View style={styles.modalView}>
           <View style={styles.modalContent}>
             <View>
@@ -26,34 +107,71 @@ const RecordWorkoutDetail = () => {
             <View style={styles.setTitle}>
               <View style={styles.setTitle}>
                 <View>
-                  <Text style={styles.adjustText}>+</Text>
-                  <Text style={styles.adjustText}>-</Text>
+                  <Text
+                    style={styles.adjustText}
+                    onPress={() => handleWeight('increment')}
+                  >
+                    +
+                  </Text>
+                  <Text
+                    style={styles.adjustText}
+                    onPress={() => handleWeight('decrement')}
+                  >
+                    -
+                  </Text>
                 </View>
-                <View>
-                  <Text style={styles.weightRep}>145</Text>
+                <View style={{ height: 50, width: 100 }}>
+                  <TextInput
+                    style={styles.weightRep}
+                    onChangeText={(value) => handleWeightInput('input', value)}
+                    value={String(weight.weight)}
+                    keyboardType="numeric"
+                  />
                 </View>
               </View>
               <View style={styles.setTitle}>
                 <View>
-                  <Text style={styles.weightRep}>1</Text>
+                  <TextInput
+                    style={styles.weightRep}
+                    onChangeText={(value) => handleRepInput('input', value)}
+                    value={String(rep.rep)}
+                    keyboardType="numeric"
+                  />
                 </View>
                 <View>
-                  <Text style={styles.adjustText}>+</Text>
-                  <Text style={styles.adjustText}>-</Text>
+                  <Text
+                    style={styles.adjustText}
+                    onPress={() => handleRep('increment')}
+                  >
+                    +
+                  </Text>
+                  <Text
+                    style={styles.adjustText}
+                    onPress={() => handleRep('increment')}
+                  >
+                    -
+                  </Text>
                 </View>
               </View>
             </View>
             <View style={styles.barbell}>
               <View style={styles.barbellBar}>
                 <View style={styles.barbellWeight}></View>
-                <View style={styles.barbellWeight}>
-                  <Text>50</Text>
+                <View style={{ justifyContent: 'flex-end' }}>
+                  <Text>45</Text>
                 </View>
-              </View>
-              <View>
                 <View style={styles.barbellWeight}></View>
+              </View>
+              <View style={styles.barbellBarBottom}>
                 <View style={styles.barbellWeight}>
-                  <Text>50</Text>
+                  <Text style={styles.barbellText}>
+                    {(weight.weight - 45) / 2}
+                  </Text>
+                </View>
+                <View style={styles.barbellWeight}>
+                  <Text style={styles.barbellText}>
+                    {(weight.weight - 45) / 2}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -62,8 +180,10 @@ const RecordWorkoutDetail = () => {
               contentContainerStyle={{ paddingBottom: 5, paddingTop: 5 }}
             >
               <View style={styles.calendar}>
-                {calendar(30).map((day) => (
-                  <Text style={styles.calendarText}>{day}</Text>
+                {calendar(30).map((day, idx) => (
+                  <Text style={styles.calendarText} key={idx}>
+                    {day}
+                  </Text>
                 ))}
               </View>
             </ScrollView>
@@ -101,14 +221,31 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: 10,
     justifyContent: 'space-between',
-    alignItems: 'space-between',
-    flexDirection: 'row'
+    alignItems: 'space-between'
   },
-  barbellBar: {},
+  barbellBar: {
+    borderBottomWidth: 2,
+    height: 50,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  barbellBarBottom: {
+    borderTopWidth: 2,
+    height: 50,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  barbellText: {
+    textAlign: 'center',
+    fontSize: 24
+  },
   barbellWeight: {
     backgroundColor: 'rgb(47,128,237)',
-    width: 50,
-    height: 50
+    borderWidth: 1,
+    height: 50,
+    width: 50
   },
   calendar: {
     flexDirection: 'row',
@@ -149,6 +286,9 @@ const styles = StyleSheet.create({
   },
   weightRep: {
     fontSize: 36,
-    marginHorizontal: 5
+    marginHorizontal: 5,
+    width: 70,
+    height: 50,
+    textAlign: 'center'
   }
 })

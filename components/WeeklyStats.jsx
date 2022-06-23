@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Text, View, Image, StyleSheet } from 'react-native'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
 const WeeklyStats = () => {
   const WeeklyStats = 'Plan Progress'
@@ -16,6 +17,12 @@ const WeeklyStats = () => {
       </View>
       <View style={styles.title}>
         <Text style={styles.weeklyStats}>{WeeklyStats}</Text>
+        <Text>
+          <AntDesign
+            title="arrowright"
+            style={{ color: 'red', fontSize: 50 }}
+          />
+        </Text>
       </View>
       <View style={styles.workoutContainer}>
         <View style={styles.workoutContainerStats}>
