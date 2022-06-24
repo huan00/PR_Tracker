@@ -1,28 +1,14 @@
-import React from 'react'
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Touchable,
-  TouchableOpacity
-} from 'react-native'
+import { Text, StyleSheet, TouchableOpacity } from 'react-native'
 
 const ExerciseRPM = ({ navigation, name, weight }) => {
-  // const excerise = 'Front Squat'
-  // const weight = '45KG'
-
-  const navigate = () => {}
   return (
-    // <View style={styles.container}>
     <TouchableOpacity
       style={styles.textContainer}
       onPress={() => navigation.navigate('WorkoutHistory')}
     >
       <Text>{name}</Text>
-      <Text>{weight}</Text>
+      <Text>{weight}lb</Text>
     </TouchableOpacity>
-    // </View>
   )
 }
 
