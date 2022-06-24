@@ -12,10 +12,11 @@ import RecordWorkoutDetail from '../components/RecordWorkoutDetail'
 
 const HomeScreen = ({ navigation }) => {
   const [myWorkouts, setMyWorkouts] = useState([
-    { name: 'Front Squat', date: '6/11/22', rpm: '1', weight: '120lb' }
+    { name: 'Front Squat', date: '6/11/22', rpm: '1', weight: '120' }
   ])
 
   const [modalVisible, setModalVisible] = useState(false)
+
   const handleRecordWorkout = () => {
     setModalVisible((modalVisible) => !modalVisible)
   }

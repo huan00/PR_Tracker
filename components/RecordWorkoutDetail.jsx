@@ -20,6 +20,8 @@ const reducerWeight = (state, action) => {
       return { weight: parseInt(state.weight) - 1 }
     case 'input':
       return { weight: parseInt(action.payload) }
+    case 'reset':
+      return initialWeight
     default: {
       return { weight: state.weight }
     }
@@ -33,6 +35,8 @@ const reducerRep = (state, action) => {
       return { rep: parseInt(state.rep) - 1 }
     case 'input':
       return { rep: parseInt(action.payload) }
+    case 'reset':
+      return initialRep
     default: {
       return { rep: state.rep }
     }
@@ -49,15 +53,14 @@ const RecordWorkoutDetail = ({
   const [weight, dispatchWeight] = useReducer(reducerWeight, initialWeight)
   const [rep, dispatchRep] = useReducer(reducerRep, initialRep)
 
-  const calendar = (days) => {
-    const week = { Su: 0, M: 1, T: 2, W: 3, Th: 4, F: 5, Sa: 6 }
-    let dayOfWeek = new Date().getDay()
-    let dateOfMonth = new Date().getDate()
-    let start = dateOfMonth - dayOfWeek
+  const week = () => {
     let date = []
 
-    for (let key in week) {
-      date.push(key + start++)
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(
+        new Date().setDate(new Date().getDate() - new Date().getDay() + i)
+      )
+      date.push(day)
     }
 
     return date
@@ -66,7 +69,6 @@ const RecordWorkoutDetail = ({
   const handleWeight = (type) => {
     dispatchWeight({ type: type })
     setNewWorkout((newWorkout) => ({ ...newWorkout, weight: weight.weight }))
-    console.log(newWorkout)
   }
 
   const handleWeightInput = (type, value) => {
@@ -75,30 +77,28 @@ const RecordWorkoutDetail = ({
       payload: parseInt(value)
     })
     setNewWorkout((newWorkout) => ({ ...newWorkout, weight: weight.weight }))
-    console.log(newWorkout)
   }
 
   const handleRep = (type) => {
     dispatchRep({ type: type })
     setNewWorkout((newWorkout) => ({ ...newWorkout, rpm: rep.rep }))
-    console.log(newWorkout)
   }
 
   const handleRepInput = (type, value) => {
     dispatchRep({ type: type, payload: parseInt(value) })
     setNewWorkout((newWorkout) => ({ ...newWorkout, rpm: rep.rep }))
-    console.log(newWorkout)
   }
 
   const handleDate = (date) => {
     setNewWorkout((newWorkout) => ({ ...newWorkout, date: date }))
-    console.log(newWorkout)
   }
 
   const handleSave = () => {
     handleAddWorkout(newWorkout)
+    setNewWorkout('')
+    dispatchWeight({ type: 'reset' })
+    dispatchRep({ type: 'reset' })
     setWorkoutDetailModal(false)
-    console.log(workoutDetailModal)
   }
 
   return (
@@ -193,14 +193,17 @@ const RecordWorkoutDetail = ({
               contentContainerStyle={{ paddingBottom: 5, paddingTop: 5 }}
             >
               <View style={styles.calendar}>
-                {calendar(30).map((day, idx) => (
-                  <Text
-                    style={styles.calendarText}
-                    key={idx}
-                    onPress={() => handleDate(day)}
-                  >
-                    {day}
-                  </Text>
+                {week().map((day, idx) => (
+                  <View key={idx}>
+                    <Text>{day.toDateString().slice(0, 2)}</Text>
+                    <Text
+                      style={styles.calendarText}
+                      key={idx}
+                      onPress={() => handleDate(day.toDateString())}
+                    >
+                      {day.getDate()}
+                    </Text>
+                  </View>
                 ))}
               </View>
             </ScrollView>
