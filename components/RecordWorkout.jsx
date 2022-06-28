@@ -22,8 +22,8 @@ const RecordWorkout = ({
   const [newWorkout, setNewWorkout] = useState({
     name: '',
     date: '',
-    rpm: '',
-    weight: ''
+    rpm: 1,
+    weight: 100
   })
   const [workoutDetailModal, setWorkoutDetailModal] = useState(false)
   const [selectedWOIdx, setSelectedWOIdx] = useState('')
@@ -35,12 +35,13 @@ const RecordWorkout = ({
     }))
     setSelectWorkout(workout)
     setSelectedWOIdx(idx)
-    console.log(selectedWorkout)
   }
 
   const handleNext = () => {
     handlePress()
     setWorkoutDetailModal((workoutDetailModal) => !workoutDetailModal)
+    setSearchExercises('')
+    setSelectWorkout('')
   }
 
   return (
@@ -57,22 +58,21 @@ const RecordWorkout = ({
             <ScrollView horizontal={true}>
               <View style={styles.workouts}>
                 {searchExercises
-                  ? barbellExercise.map((exercise, idx) =>
-                      exercise.name.includes(searchExercises) ? (
-                        <Text
-                          style={
-                            selectedWOIdx === idx
-                              ? styles.selectWorkout
-                              : styles.workoutText
-                          }
-                          key={idx}
-                          onPress={() => handleNewWorkout(exercise, idx)}
-                        >
-                          {exercise.name}
-                        </Text>
-                      ) : (
-                        <></>
-                      )
+                  ? barbellExercise.map(
+                      (exercise, idx) =>
+                        exercise.name.includes(searchExercises) && (
+                          <Text
+                            style={
+                              selectedWOIdx === idx
+                                ? styles.selectWorkout
+                                : styles.workoutText
+                            }
+                            key={idx}
+                            onPress={() => handleNewWorkout(exercise, idx)}
+                          >
+                            {exercise.name}
+                          </Text>
+                        )
                     )
                   : barbellExercise.map((exercise, idx) => (
                       <Text

@@ -52,6 +52,7 @@ const RecordWorkoutDetail = ({
 }) => {
   const [weight, dispatchWeight] = useReducer(reducerWeight, initialWeight)
   const [rep, dispatchRep] = useReducer(reducerRep, initialRep)
+  const [selectedDate, setSelectedDate] = useState()
 
   const week = () => {
     let date = []
@@ -89,16 +90,18 @@ const RecordWorkoutDetail = ({
     setNewWorkout((newWorkout) => ({ ...newWorkout, rpm: rep.rep }))
   }
 
-  const handleDate = (date) => {
+  const handleDate = (date, idx) => {
     setNewWorkout((newWorkout) => ({ ...newWorkout, date: date }))
+    setSelectedDate(idx)
   }
 
   const handleSave = () => {
     handleAddWorkout(newWorkout)
-    setNewWorkout('')
+    setNewWorkout({ name: '', date: '', rpm: 1, weight: 100 })
     dispatchWeight({ type: 'reset' })
     dispatchRep({ type: 'reset' })
     setWorkoutDetailModal(false)
+    console.log(newWorkout)
   }
 
   return (
@@ -190,16 +193,27 @@ const RecordWorkoutDetail = ({
             </View>
             <ScrollView
               horizontal={true}
-              contentContainerStyle={{ paddingBottom: 5, paddingTop: 5 }}
+              contentContainerStyle={{
+                paddingBottom: 5,
+                paddingTop: 5,
+                justifyContent: 'space-around',
+                flex: 1
+              }}
             >
               <View style={styles.calendar}>
                 {week().map((day, idx) => (
-                  <View key={idx}>
-                    <Text>{day.toDateString().slice(0, 2)}</Text>
+                  <View key={idx} style={{ alignItems: 'space-around' }}>
+                    <Text style={{ textAlign: 'center' }}>
+                      {day.toDateString().slice(0, 2)}
+                    </Text>
                     <Text
-                      style={styles.calendarText}
+                      style={
+                        selectedDate === idx
+                          ? styles.caldendarSelected
+                          : styles.calendarText
+                      }
                       key={idx}
-                      onPress={() => handleDate(day.toDateString())}
+                      onPress={() => handleDate(day.toDateString(), idx)}
                     >
                       {day.getDate()}
                     </Text>
@@ -272,14 +286,25 @@ const styles = StyleSheet.create({
   },
   calendar: {
     flexDirection: 'row',
-    height: 30
+    height: 50
   },
   calendarText: {
-    fontSize: 18,
+    fontSize: 24,
     borderColor: 'rgb(224,224,224)',
     borderWidth: 1,
     marginRight: 5,
     padding: 5
+  },
+  caldendarSelected: {
+    color: 'green',
+    fontSize: 18,
+    fontWeight: 'bold',
+    borderWidth: 2,
+    borderColor: 'purple',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    padding: 5,
+    marginRight: 10
   },
   contentText: {
     fontSize: 18
