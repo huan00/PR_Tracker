@@ -6,7 +6,7 @@ import {
   Image,
   StyleSheet,
   ScrollView,
-  TouchableOpacity
+  TextInput
 } from 'react-native'
 import WorkoutButton from './WorkoutButton'
 import RecordWorkoutDetail from './RecordWorkoutDetail'
@@ -14,58 +14,91 @@ import RecordWorkoutDetail from './RecordWorkoutDetail'
 const RecordWorkout = ({
   modalVisible,
   handlePress,
-  setModalVisible,
-  handleAddWorkout
+  handleAddWorkout,
+  barbellExercise
 }) => {
-  const workouts = [
-    'Front Squat',
-    'Back Squat',
-    'OverHead Squat',
-    'Front Squat',
-    'Back Squat',
-    'OverHead Squat'
-  ]
-
+  const [searchExercises, setSearchExercises] = useState('')
+  const [selectedWorkout, setSelectWorkout] = useState()
   const [newWorkout, setNewWorkout] = useState({
     name: '',
     date: '',
     rpm: '',
     weight: ''
   })
+  const [workoutDetailModal, setWorkoutDetailModal] = useState(false)
+  const [selectedWOIdx, setSelectedWOIdx] = useState('')
 
-  const handleNewWorkout = (workout) => {
+  const handleNewWorkout = (workout, idx) => {
     setNewWorkout((newWorkout) => ({
       ...newWorkout,
-      name: workout
+      name: workout.name
     }))
+    setSelectWorkout(workout)
+    setSelectedWOIdx(idx)
+    console.log(selectedWorkout)
   }
-  const [workoutDetailModal, setWorkoutDetailModal] = useState(false)
 
   const handleNext = () => {
     handlePress()
     setWorkoutDetailModal((workoutDetailModal) => !workoutDetailModal)
   }
+
   return (
     <View style={styles.container}>
       <Modal animationType="slide" visible={modalVisible} transparent={true}>
         <View style={styles.modalView}>
           <View style={styles.modalContent}>
             <Text>Record your Workout</Text>
+            <TextInput
+              placeholder="Search for an exercise"
+              style={styles.searchExercise}
+              onChangeText={(value) => setSearchExercises(value.toLowerCase())}
+            />
             <ScrollView horizontal={true}>
               <View style={styles.workouts}>
-                {workouts.map((workout, idx) => (
-                  <Text
-                    key={idx}
-                    style={styles.workoutText}
-                    onPress={() => handleNewWorkout(workout)}
-                  >
-                    {workout}
-                  </Text>
-                ))}
+                {searchExercises
+                  ? barbellExercise.map((exercise, idx) =>
+                      exercise.name.includes(searchExercises) ? (
+                        <Text
+                          style={
+                            selectedWOIdx === idx
+                              ? styles.selectWorkout
+                              : styles.workoutText
+                          }
+                          key={idx}
+                          onPress={() => handleNewWorkout(exercise, idx)}
+                        >
+                          {exercise.name}
+                        </Text>
+                      ) : (
+                        <></>
+                      )
+                    )
+                  : barbellExercise.map((exercise, idx) => (
+                      <Text
+                        key={idx}
+                        // style={styles.workoutText}
+                        style={
+                          selectedWOIdx === idx
+                            ? styles.selectWorkout
+                            : styles.workoutText
+                        }
+                        onPress={() => handleNewWorkout(exercise, idx)}
+                      >
+                        {exercise.name}
+                      </Text>
+                    ))}
               </View>
             </ScrollView>
             <View style={styles.imageContainer}>
-              <Image source={''} style={styles.image} />
+              {selectedWorkout ? (
+                <Image
+                  source={{ uri: selectedWorkout.gifUrl }}
+                  style={styles.image}
+                />
+              ) : (
+                <Text style={styles.imageLoadingText}>Select WorkOut</Text>
+              )}
             </View>
             <View>
               <WorkoutButton title={'Next'} handlePress={handleNext} />
@@ -95,17 +128,20 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   imageContainer: {
-    flexGrow: 1,
     width: '100%',
+    height: '60%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'blue',
+    // backgroundColor: 'blue',
     marginBottom: 10
   },
   image: {
     width: 200,
-    height: 200,
-    backgroundColor: 'gray'
+    height: 200
+  },
+  imageLoadingText: {
+    fontSize: 36,
+    marginBottom: 100
   },
   modalView: {
     height: '100%',
@@ -124,18 +160,33 @@ const styles = StyleSheet.create({
     bottom: 0,
     padding: 16
   },
+  selectWorkout: {
+    color: 'green',
+    fontSize: 18,
+    fontWeight: 'bold',
+    borderWidth: 2,
+    borderColor: 'purple',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    padding: 5,
+    marginRight: 10
+  },
   titleText: {},
+  searchExercise: {
+    width: '100%',
+    fontSize: 24,
+    padding: 8
+  },
   workouts: {
     flexDirection: 'row',
     width: '100%',
     height: 30
-    // flex: 1,
-    // backgroundColor: 'yellow'
   },
   workoutText: {
     marginRight: 10,
     marginTop: 10,
     fontSize: 18,
+    textDecorationLine: 'underline',
     fontWeight: 'bold'
   }
 })
