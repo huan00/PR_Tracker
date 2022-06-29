@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import {
-  View,
-  StyleSheet,
-  SafeAreaView,
-  ScrollView,
-  Image,
-  Text
-} from 'react-native'
+import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native'
+import AsyncStorge from '@react-native-async-storage/async-storage'
 
 import WeeklyStats from '../components/WeeklyStats'
 import Days from '../components/Days'
@@ -20,15 +14,42 @@ const HomeScreen = ({ navigation }) => {
   const [myWorkouts, setMyWorkouts] = useState([
     { name: 'Front Squat', date: '6/11/22', rpm: '1', weight: '120' }
   ])
-  const [modalVisible, setModalVisible] = useState(false)
+  const [storedWorkouts, setStoredWorkouts] = useState()
+  const [workoutModal, setworkoutModal] = useState(false)
+  const [weightSelectModal, setWeightSelectModal] = useState(false)
   const [barbellExercise, setBarbellExercise] = useState([])
+  const [storedBarbellExercises, setStoredBarbellExercises] = useState([])
 
   useEffect(() => {
-    getWorkoutFromAPI()
-  }, [])
+    getStoredWorkout()
+    getStoredExercises()
+    // if (!storedBarbellExercises) {
+    //   console.log(storedBarbellExercises)
+    //   getWorkoutFromAPI()
+    // }
+  }, [weightSelectModal])
+
+  const getStoredWorkout = async () => {
+    try {
+      const workouts = await AsyncStorge.getItem('@workout_Key')
+      workouts != null ? setStoredWorkouts(JSON.parse(workouts)) : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const getStoredExercises = async () => {
+    try {
+      const storedExcerises = await AsyncStorge.getItem('@APIExercise')
+      storedExcerises != null
+        ? setStoredBarbellExercises(JSON.parse(storedExcerises))
+        : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleRecordWorkout = () => {
-    setModalVisible((modalVisible) => !modalVisible)
+    setworkoutModal((workoutModal) => !workoutModal)
   }
 
   const handleAddWorkout = (newWorkout) => {
@@ -52,6 +73,20 @@ const HomeScreen = ({ navigation }) => {
       .catch((err) => console.error(err))
   }
 
+  const storeAPIData = async (data) => {
+    try {
+      console.log(data)
+      let APIExercise = JSON.stringify(data)
+      await AsyncStorge.setItem('@APIExercise', APIExercise)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  if (barbellExercise.length > 0) {
+    storeAPIData(barbellExercise)
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.viewContainer}>
@@ -62,21 +97,25 @@ const HomeScreen = ({ navigation }) => {
             <RPM />
             <View style={{ height: 200 }}>
               <ScrollView>
-                {myWorkouts.map((workout, idx) => (
-                  <ExerciseRPM
-                    navigation={navigation}
-                    name={workout.name}
-                    weight={workout.weight}
-                    key={idx}
-                  />
-                ))}
+                {storedWorkouts &&
+                  storedWorkouts.map((workout, idx) => (
+                    <ExerciseRPM
+                      navigation={navigation}
+                      name={workout.name}
+                      weight={workout.weight}
+                      key={idx}
+                    />
+                  ))}
               </ScrollView>
             </View>
             <RecordWorkout
-              modalVisible={modalVisible}
+              workoutModal={workoutModal}
+              weightSelectModal={weightSelectModal}
+              setWeightSelectModal={setWeightSelectModal}
               handlePress={handleRecordWorkout}
               handleAddWorkout={handleAddWorkout}
-              barbellExercise={barbellExercise}
+              barbellExercise={storedBarbellExercises}
+              getStoredWorkout={getStoredWorkout}
             />
           </View>
           <View style={styles.buttonContainer}>

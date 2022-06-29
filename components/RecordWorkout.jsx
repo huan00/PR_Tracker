@@ -12,10 +12,13 @@ import WorkoutButton from './WorkoutButton'
 import RecordWorkoutDetail from './RecordWorkoutDetail'
 
 const RecordWorkout = ({
-  modalVisible,
+  workoutModal,
   handlePress,
   handleAddWorkout,
-  barbellExercise
+  barbellExercise,
+  getStoredWorkout,
+  weightSelectModal,
+  setWeightSelectModal
 }) => {
   const [searchExercises, setSearchExercises] = useState('')
   const [selectedWorkout, setSelectWorkout] = useState()
@@ -39,14 +42,15 @@ const RecordWorkout = ({
 
   const handleNext = () => {
     handlePress()
-    setWorkoutDetailModal((workoutDetailModal) => !workoutDetailModal)
+    setWeightSelectModal((weightSelectModal) => !weightSelectModal)
+    setSelectedWOIdx('')
     setSearchExercises('')
     setSelectWorkout('')
   }
 
   return (
     <View style={styles.container}>
-      <Modal animationType="slide" visible={modalVisible} transparent={true}>
+      <Modal animationType="slide" visible={workoutModal} transparent={true}>
         <View style={styles.modalView}>
           <View style={styles.modalContent}>
             <Text>Record your Workout</Text>
@@ -107,11 +111,12 @@ const RecordWorkout = ({
         </View>
       </Modal>
       <RecordWorkoutDetail
-        workoutDetailModal={workoutDetailModal}
-        setWorkoutDetailModal={setWorkoutDetailModal}
+        weightSelectModal={weightSelectModal}
+        setWeightSelectModal={setWeightSelectModal}
         setNewWorkout={setNewWorkout}
         newWorkout={newWorkout}
         handleAddWorkout={handleAddWorkout}
+        getStoredWorkout={getStoredWorkout}
       />
     </View>
   )
