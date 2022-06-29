@@ -1,4 +1,5 @@
 import React, { useReducer, useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   View,
   Modal,
@@ -44,11 +45,12 @@ const reducerRep = (state, action) => {
 }
 
 const RecordWorkoutDetail = ({
-  workoutDetailModal,
   setNewWorkout,
   newWorkout,
   handleAddWorkout,
-  setWorkoutDetailModal
+  getStoredWorkout,
+  weightSelectModal,
+  setWeightSelectModal
 }) => {
   const [weight, dispatchWeight] = useReducer(reducerWeight, initialWeight)
   const [rep, dispatchRep] = useReducer(reducerRep, initialRep)
@@ -95,20 +97,39 @@ const RecordWorkoutDetail = ({
     setSelectedDate(idx)
   }
 
+  const storeWorkout = async (data) => {
+    try {
+      let newWorkout = []
+      let temp = await AsyncStorage.getItem('@workout_Key')
+      if (temp !== null) {
+        temp = JSON.parse(temp)
+        newWorkout = [...temp]
+        newWorkout.push(data)
+      } else {
+        newWorkout.push(data)
+      }
+      const workout = JSON.stringify(newWorkout)
+      await AsyncStorage.setItem('@workout_Key', workout)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const handleSave = () => {
     handleAddWorkout(newWorkout)
+    storeWorkout(newWorkout)
     setNewWorkout({ name: '', date: '', rpm: 1, weight: 100 })
     dispatchWeight({ type: 'reset' })
     dispatchRep({ type: 'reset' })
-    setWorkoutDetailModal(false)
-    console.log(newWorkout)
+    setWeightSelectModal(false)
+    getStoredWorkout()
   }
 
   return (
     <View style={styles.container}>
       <Modal
         animationType="slide"
-        visible={workoutDetailModal}
+        visible={weightSelectModal}
         transparent={true}
       >
         <View style={styles.modalView}>
